@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Abid Developer</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+        color: #fff;
+    }
+
+    /* Canvas for animated background */
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
+
+    .login-box {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 40px;
+        border-radius: 15px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        width: 350px;
+        animation: zoomIn 1.2s ease forwards;
+    }
+
+    @keyframes zoomIn {
+        0% { transform: scale(0.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .login-box h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, #ff4e50, #f9d423);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 2rem;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        outline: none;
+        margin-bottom: 15px;
+        background: rgba(255,255,255,0.15);
+        color: #fff;
+        font-size: 1rem;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+        transition: 0.3s;
+    }
+
+    input:focus {
+        background: rgba(255,255,255,0.25);
+        box-shadow: 0 0 10px #00e6ff;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(45deg, #ff4e50, #f9d423);
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px #ff4e50;
+    }
+
+    .signup-link {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 0.9rem;
+    }
+
+    .signup-link a {
+        color: #00e6ff;
+        text-decoration: none;
+    }
+
+    .watermark {
+        position: fixed;
+        bottom: 15px;
+        right: 20px;
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.5);
+        z-index: 3;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="login-box">
+    <h2>Login Here</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p style="color: #ff4e50;">{{a}}</p>
+        <label for="username">Name</label>
+        <input type="text" id="username" placeholder="Enter username" required name="username">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Password" required name="password">
+
+        <button type="submit">Login</button>
+
+        <p class="signup-link">No account? <a href="{% url 'signup' %}">Sign up</a></p>
+    </form>
+</div>
+
+<div class="watermark">Designed by Abid Developer</div>
+
+<script>
+// Particle background animation
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+const colors = ['#ff4e50', '#f9d423', '#00e6ff', '#9b59b6'];
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = Math.random() * 3 + 1;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+        this.draw();
+    }
+}
+
+function init() {
+    particles = [];
+    for(let i = 0; i < 150; i++) {
+        particles.push(new Particle());
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => p.update());
+    connectParticles();
+    requestAnimationFrame(animate);
+}
+
+function connectParticles() {
+    for(let a = 0; a < particles.length; a++) {
+        for(let b = a; b < particles.length; b++) {
+            let dist = Math.hypot(particles[a].x - particles[b].x, particles[a].y - particles[b].y);
+            if(dist < 100) {
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                ctx.lineWidth = 0.5;
+                ctx.moveTo(particles[a].x, particles[a].y);
+                ctx.lineTo(particles[b].x, particles[b].y);
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+});
+
+init();
+animate();
+</script>
+
+</body>
+</html>
+
+

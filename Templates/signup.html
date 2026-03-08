@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abid Developer Signup</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(-45deg, #0f172a, #1e293b, #0f172a, #334155);
+        background-size: 400% 400%;
+        animation: gradientBG 20s ease infinite;
+        overflow: hidden;
+        position: relative;
+        color: white;
+    }
+
+    /* Large watermark text */
+    .brand-text {
+        position: absolute;
+        font-size: 6rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.04);
+        white-space: nowrap;
+        animation: slideBrand 18s linear infinite;
+        pointer-events: none;
+        text-transform: uppercase;
+    }
+
+    /* Particle dots */
+    .particle {
+        position: absolute;
+        background: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: floatParticle linear infinite;
+    }
+
+    /* Signup form box */
+    .signup-box {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 35px;
+        border-radius: 18px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        text-align: center;
+        z-index: 2;
+        width: 350px;
+        animation: fadeIn 1.5s ease forwards;
+        border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .signup-box h2 {
+        margin-bottom: 20px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    label {
+        display: block;
+        text-align: left;
+        font-size: 14px;
+        margin-top: 12px;
+        color: #e2e8f0;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: none;
+        outline: none;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.12);
+        color: white;
+        font-size: 14px;
+        transition: 0.3s ease;
+    }
+
+    input:focus {
+        background: rgba(255,255,255,0.2);
+        box-shadow: 0 0 12px rgba(0,255,255,0.4);
+    }
+
+    ::placeholder {
+        color: rgba(255,255,255,0.6);
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(14,165,233,0.4);
+    }
+
+    .login-link {
+        margin-top: 15px;
+        font-size: 14px;
+        text-decoration: underline;
+        display: block;
+        color: #bae6fd;
+    }
+
+    /* Animations */
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @keyframes slideBrand {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatParticle {
+        0% { transform: translateY(0); opacity: 0.8; }
+        100% { transform: translateY(-100vh); opacity: 0; }
+    }
+</style>
+</head>
+<body>
+
+    <!-- Brand watermark -->
+    <div class="brand-text">Abid Developer</div>
+
+    <!-- Particle generator -->
+    <script>
+        for (let i = 0; i < 35; i++) {
+            let p = document.createElement("div");
+            p.classList.add("particle");
+            let size = Math.random() * 4 + 2;
+            p.style.width = `${size}px`;
+            p.style.height = `${size}px`;
+            p.style.left = Math.random() * 100 + "vw";
+            p.style.top = Math.random() * 100 + "vh";
+            p.style.animationDuration = (6 + Math.random() * 5) + "s";
+            document.body.appendChild(p);
+        }
+    </script>
+
+    <!-- Signup form -->
+    <div class="signup-box">
+        <h2>Create Account</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            <p style="color: red;">{{ a }}</p>
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter username" required name="username">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter email" required name="email">
+
+            <label for="pass1">Password</label>
+            <input type="password" id="pass1" placeholder="Enter password" required name="pass1">
+
+            <label for="pass2">Confirm Password</label> 
+            <input type="password" id="pass2" placeholder="Confirm password" required name="pass2">
+
+            <button type="submit">Sign Up</button>
+
+            <a href="{% url 'login' %}" class="login-link">Already have an account?</a>
+        </form>
+    </div>
+
+</body>
+</html>

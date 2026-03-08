@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animated Teachers Registration Form</title>
+  <!--
+    This single-file page contains an animated teachers registration form.
+    The background uses a photographic image (you can replace the URL below).
+    The CSS intentionally includes many properties, comments and animations
+    so it is rich and 'human-style' as requested.
+  -->
+  <style>
+    /* ======================================================
+       BASE / RESET
+       ====================================================== */
+    :root{
+      --accent-1: #43cea2;
+      --accent-2: #185a9d;
+      --muted: rgba(230, 224, 224, 0.85);
+      --glass: rgba(255,255,255,0.08);
+      --glass-2: rgba(255,255,255,0.12);
+      --shadow: 0 12px 30px rgba(8,10,25,0.5);
+      --radius-xl: 20px;
+      --radius-lg: 14px;
+      --radius-sm: 8px;
+      --max-width: 980px;
+      --form-width: 520px;
+      --font-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+
+    /* Reset common elements */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:var(--font-sans);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:var(--muted);
+      line-height:1.3;
+      background-color:#0b1220; /* fallback */
+      /* Background image changed from the form: replace URL to change picture */
+      background-image: linear-gradient(rgba(3,6,23,0.55), rgba(3,6,23,0.55)), url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=example');
+      background-repeat:no-repeat;
+      background-position:center center;
+      background-size:cover;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+      overflow-x:hidden;
+    }
+
+    /* Decorative floating gradient overlay for subtle movement */
+    .bg-aurora{
+      position:fixed;inset:0;pointer-events:none;
+      background: radial-gradient(600px 300px at 10% 20%, rgba(67,206,162,0.12), transparent 10%),
+                  radial-gradient(800px 400px at 90% 80%, rgba(24,90,157,0.12), transparent 15%);
+      mix-blend-mode:screen;
+      animation: auroraShift 18s ease-in-out infinite;
+      z-index:0;
+    }
+    @keyframes auroraShift{
+      0%{transform:translateY(0) scale(1)}
+      50%{transform:translateY(-20px) scale(1.03)}
+      100%{transform:translateY(0) scale(1)}
+    }
+
+    /* ======================================================
+       LAYOUT: wrapper + panel
+    ====================================================== */
+    .wrap{
+      width:100%;
+      max-width:var(--max-width);
+      display:grid;
+      grid-template-columns: 1fr 520px;
+      gap:40px;
+      align-items:center;
+      z-index:2;
+    }
+
+    /* Left info card */
+    .info-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:var(--radius-xl);
+      padding:36px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,0.04);
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:18px;
+      transform:translateY(0);
+      animation: cardFloat 6s ease-in-out infinite;
+    }
+    @keyframes cardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+    .info-card .badge{
+      display:inline-block;padding:6px 12px;border-radius:999px;font-weight:600;font-size:13px;
+      background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
+      color:#06111a;box-shadow:0 6px 18px rgba(24,90,157,0.18);
+    }
+
+    .info-card h1{
+      font-size:28px;color:var(--muted);letter-spacing:0.2px;margin-top:6px;
+    }
+    .info-card p{color:rgba(255,255,255,0.85);opacity:0.95}
+
+    .decor-list{margin-top:6px;display:flex;flex-direction:column;gap:10px}
+    .decor-list .row{display:flex;align-items:center;gap:12px}
+    .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));box-shadow:0 6px 18px rgba(67,206,162,0.12)}
+
+    /* ======================================================
+       FORM PANEL / GLASS
+    ====================================================== */
+    .form-panel{
+      width:var(--form-width);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border-radius:var(--radius-xl);
+      padding:26px 28px;
+      box-shadow: 0 28px 60px rgba(2,6,23,0.65), inset 0 1px 0 rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      position:relative;
+      overflow:visible;
+      z-index:3;
+    }
+
+    /* top header */
+    .form-panel .head{
+      display:flex;align-items:center;gap:12px;margin-bottom:8px
+    }
+    .avatar{
+      width:54px;height:54px;border-radius:12px;flex-shrink:0;overflow:hidden;border:1px solid rgba(255,255,255,0.06);
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#021;
+      box-shadow:0 8px 30px rgba(0,0,0,0.45);
+    }
+    .head h2{font-size:18px;margin:0;color:#fff}
+    .head p{font-size:13px;margin:0;color:rgba(255,255,255,0.85)}
+
+    /* form body */
+    form.reg-form{display:flex;flex-direction:column;gap:16px;margin-top:12px}
+
+    /* group */
+    .field{
+      display:flex;flex-direction:column;gap:8px;position:relative
+    }
+    label.field-label{font-size:13px;color:rgba(255,255,255,0.86);font-weight:600}
+
+    /* inputs - glass style */
+    input[type='text'],input[type='email'],input[type='tel'],textarea,select{
+      width:100%;padding:12px 14px;border-radius:12px;border:none;outline:none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      color:#f0e9e9;font-size:15px;box-shadow: inset 0 4px 12px rgba(2,6,23,0.45);
+      transition:all 220ms cubic-bezier(.2,.9,.2,1);
+      backdrop-filter: blur(6px);
+    }
+
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.55)}
+
+    input:focus,textarea:focus,select:focus{
+      transform:translateY(-2px) scale(1.01);
+      box-shadow:0 8px 24px rgba(24,90,157,0.14), inset 0 6px 18px rgba(255,255,255,0.02);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    }
+
+    textarea{min-height:110px;resize:vertical;padding-top:14px;padding-bottom:14px}
+
+    /* Floating labels effect */
+    .float-wrap{position:relative}
+    .float-wrap input:placeholder-shown + label{opacity:0;transform:translateY(6px);pointer-events:none}
+    .float-wrap label{
+      position:absolute;left:14px;top:12px;font-size:13px;color:rgba(236, 233, 233, 0.7);
+      transition:all 180ms ease-in-out;background:transparent;padding:0 4px
+    }
+    .float-wrap input:not(:placeholder-shown)+label,
+    .float-wrap textarea:not(:placeholder-shown)+label{
+      transform:translateY(-12px) scale(0.92);opacity:0.95;color:var(--accent-2);
+    }
+
+    /* Small helper text and error states */
+    .helper{font-size:12px;color:rgba(255,255,255,0.65)}
+    .error{color:#ff6b6b;font-weight:700}
+
+    /* form grid for two-column rows */
+    .two-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+    /* custom file input */
+    .filebox{display:flex;align-items:center;gap:10px}
+    .filebox input[type='file']{display:none}
+    .filebox .filebtn{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.04);cursor:pointer;font-weight:700;border:1px dashed rgba(255,255,255,0.06)}
+    .filebox .filetxt{font-size:13px;color:rgba(234, 221, 221, 0.75)}
+
+    /* fancy checkbox / radio */
+    .checkbox{display:flex;gap:10px;align-items:center}
+    .checkbox input{appearance:none;width:18px;height:18px;border-radius:6px;border:2px solid rgba(255,255,255,0.12);display:inline-block;position:relative}
+    .checkbox input:checked{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));border:none;box-shadow:0 6px 20px rgba(67,206,162,0.12)}
+
+    /* submit btn */
+    .btn-row{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:6px}
+    .btn-submit{
+      padding:12px 18px;border-radius:12px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#05121a;font-weight:800;letter-spacing:0.4px;
+      cursor:pointer;box-shadow:0 14px 40px rgba(24,90,157,0.25);transition:transform 220ms cubic-bezier(.2,.9,.2,1),filter 220ms
+    }
+    .btn-submit:hover{transform:translateY(-4px) scale(1.02);filter:brightness(1.03)}
+    .btn-submit:active{transform:translateY(0) scale(0.99)}
+
+    .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 16px;border-radius:10px;color:rgba(255,255,255,0.95);cursor:pointer}
+
+    /* subtle progress bar for multi-step (visual only) */
+    .progress-wrap{height:8px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
+    .progress{height:100%;width:52%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));transition:width 420ms cubic-bezier(.2,.9,.2,1)}
+
+    /* small floating helper card */
+    .tip-card{position:absolute;right:20px;top:-28px;background:rgba(3,6,23,0.6);padding:8px 12px;border-radius:10px;font-size:13px;border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(6px)}
+
+    /* animated decorative rings */
+    .ring{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,0.04);filter:blur(6px);pointer-events:none}
+    .ring.r1{width:220px;height:220px;right:-60px;bottom:-60px;transform:rotate(6deg);}
+    .ring.r2{width:120px;height:120px;left:-40px;top:-40px;opacity:0.6}
+
+    /* small responsive tweaks */
+    @media (max-width:1100px){
+      .wrap{grid-template-columns:1fr;max-width:720px;padding:10px}
+      .form-panel{margin:0 auto}
+      .info-card{order:2}
+      .ring.r1,.ring.r2{display:none}
+    }
+
+    /* ======================================================
+       Input focus pulse / icons / micro-interactions
+    ====================================================== */
+    .input-with-icon{position:relative}
+    .input-with-icon svg{position:absolute;right:12px;top:10px;width:18px;height:18px;opacity:0.9;pointer-events:none}
+    input:focus + svg{transform:translateX(4px);opacity:1}
+
+    /* small animation for submit success */
+    .success-burst{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+    .burst-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-1);margin:6px;animation:burst 600ms ease-out forwards}
+    @keyframes burst{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:translateY(-40px) scale(0.6);opacity:0}}
+
+    /* ======================================================
+       Accessibility and focus outlines
+    ====================================================== */
+    :focus{outline:none}
+    input:focus-visible,button:focus-visible{outline:3px solid rgba(67,206,162,0.12);outline-offset:3px}
+
+    /* ======================================================
+       Extra decorative CSS: floating bubbles, sparkles
+    ====================================================== */
+    .bubble-wrap{position:absolute;inset:auto 0 0 0;height:160px;display:flex;gap:18px;justify-content:center;align-items:flex-end;pointer-events:none}
+    .bubble{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.06);transform:translateY(0);animation:bubbleUp var(--dur,6s) infinite ease-in}
+    .bubble:nth-child(2){--dur:5s;width:14px;height:14px}
+    .bubble:nth-child(3){--dur:8s;width:38px;height:38px}
+    @keyframes bubbleUp{0%{transform:translateY(0) scale(1) }50%{transform:translateY(-40px) scale(1.08)}100%{transform:translateY(0) scale(1)}}
+
+    /* ======================================================
+       FORM: visual states for required and invalid
+    ====================================================== */
+    input[required]{box-shadow:inset 0 4px 14px rgba(0,0,0,0.35)}
+    input:invalid{border:1px solid rgba(255,90,90,0.18);box-shadow:0 8px 24px rgba(255,90,90,0.06)}
+
+    /* ======================================================
+       Full width footer / small print
+    ====================================================== */
+    .small{font-size:12px;color:rgba(255,255,255,0.6);text-align:center;margin-top:10px}
+
+    /* ======================================================
+       Micro responsive and print cleanup
+    ====================================================== */
+    @media (max-width:420px){
+      body{padding:18px}
+      .wrap{gap:18px}
+      .form-panel{padding:18px}
+      .head h2{font-size:16px}
+    }
+
+    @media print{body{background:none;color:#000}.form-panel,.info-card{box-shadow:none;border:1px solid #ccc}}
+
+    /* ======================================================
+       END of CSS
+       ------------------------------------------------------
+       The rules above intentionally include many properties and
+       decorative pieces to create a rich, animated UI experience.
+    ====================================================== */
+  </style>
+</head>
+<body>
+  <div class="bg-aurora" aria-hidden="true"></div>
+  <div class="wrap" role="main" aria-labelledby="form-head">
+
+    <section class="info-card" aria-hidden="false">
+      <span class="badge">GCMS • Faculty</span>
+      <h1 id="form-head">Join the Teaching Team</h1>
+      <p>
+        Fill the registration form to be considered for a teaching position. We value
+        passion, dedication, and a desire to shape curious minds. This panel contains
+        helpful tips and overview information about the process.
+      </p>
+
+      <div class="decor-list" aria-hidden="true">
+        <div class="row"><span class="dot"></span><div><strong>Eligibility</strong><div class="helper">Minimum bachelors degree; subject specialization preferred.</div></div></div>
+        <div class="row"><span class="dot"></span><div><strong>Documents</strong><div class="helper">Bring CV, certifications and a short cover letter.</div></div></div>
+        <div class="row"><span class="dot"></span><div><strong>Interview</strong><div class="helper">Shortlisted candidates will be contacted for in-person interview.</div></div></div>
+      </div>
+
+      <div style="margin-top:14px;display:flex;gap:8px;align-items:center">
+        <button class="btn-secondary" aria-label="Download brochure">Download Brochure</button>
+        <button class="btn-secondary" aria-label="Contact HR">Contact HR</button>
+      </div>
+
+    </section>
+
+    <aside class="form-panel" aria-label="Registration form panel">
+      <div class="tip-card">Quick • Takes ~2 min</div>
+      <div class="head">
+        <div class="avatar" aria-hidden="true">TG</div>
+        <div>
+          <h2>Teachers Registration</h2>
+          <p>Complete your details below — we will get back within 7–10 business days.</p>
+        </div>
+      </div>
+
+      <form class="reg-form" action="{% url 'T_form' %}" method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <div class="two-grid">
+          <div class="field float-wrap">
+            <input id="name" name="name" type="text" placeholder=" " required autocomplete="name" />
+            <label for="name" class="field-label">Teacher Name</label>
+            <div class="helper">Full name as on official documents</div>
+          </div>
+
+          <div class="field float-wrap">
+            <input id="f_name" name="f_name" type="text" placeholder=" " required autocomplete="off" />
+            <label for="f_name" class="field-label">Father / Guardian Name</label>
+            <div class="helper">Father or guardian's full name</div>
+          </div>
+        </div>
+
+        <div class="two-grid">
+          <div class="field float-wrap input-with-icon">
+            <input id="P_number" name="P_number" type="tel" placeholder=" " pattern="\+?\d{9,15}" required />
+            <label for="P_number" class="field-label">Phone Number</label>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M6 2l4 4m0 0L4 12l4 4 8-8 4-4"></path></svg>
+            <div class="helper">Include country code e.g. +92XXXXXXXXXX</div>
+          </div>
+
+          <div class="field float-wrap">
+            <input id="email" name="email" type="email" placeholder=" " required autocomplete="email" />
+            <label for="email" class="field-label">Email Address</label>
+            <div class="helper">We'll contact you at this address</div>
+          </div>
+        </div>
+
+        <div class="field float-wrap">
+          <input id="address" name="address" type="text" placeholder=" " required />
+          <label for="address" class="field-label">Address</label>
+          <div class="helper">Permanent / current address</div>
+        </div>
+
+        <div class="field float-wrap">
+          <textarea id="message" name="message" placeholder=" "></textarea>
+          <label for="message" class="field-label">Message / Short Biography</label>
+          <div class="helper">Tell us about your teaching experience and subjects</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Preferred Subjects</label>
+          <select name="subject" aria-label="preferred subject">
+            <option value="">Select subject</option>
+            <option>Mathematics</option>
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Biology</option>
+            <option>English</option>
+            <option>Computer Science</option>
+            <option>Islamiyat</option>
+            <option>Urdu</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Upload CV (PDF)</label>
+          <div class="filebox">
+            <label class="filebtn" for="cv">Choose file</label>
+            <input id="cv" name="cv" type="file" accept="application/pdf" />
+            <div class="filetxt">No file chosen</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Available for</label>
+          <div style="display:flex;gap:12px">
+            <label class="checkbox"><input type="checkbox" name="fulltime" /> Full-time</label>
+            <label class="checkbox"><input type="checkbox" name="parttime" /> Part-time</label>
+            <label class="checkbox"><input type="checkbox" name="visiting" /> Visiting</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="progress-wrap" aria-hidden="true"><div class="progress"></div></div>
+        </div>
+
+        <div class="btn-row">
+          <div style="display:flex;gap:8px;align-items:center">
+            <button type="button" class="btn-secondary" onclick="resetForm(event)">Reset</button>
+            <button type="button" class="btn-secondary" onclick="saveDraft(event)">Save Draft</button>
+          </div>
+
+          <button type="submit" class="btn-submit">Submit Application</button>
+        </div>
+
+        <div class="small">By submitting you agree to our processing of personal data.</div>
+      </form>
+
+      <!-- decorative rings -->
+      <div class="ring r1" aria-hidden="true"></div>
+      <div class="ring r2" aria-hidden="true"></div>
+
+      <!-- bubbles -->
+      <div class="bubble-wrap" aria-hidden="true">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <script>
+    /* Small JS to handle UI niceties — safe, progressive, non-blocking */
+    (function(){
+      // file input display
+      const fileInput = document.getElementById('cv');
+      const fileTxt = document.querySelector('.filetxt');
+      const fileBtn = document.querySelector('.filebtn');
+      fileBtn?.addEventListener('click', (e)=>{ document.getElementById('cv').click(); });
+      fileInput?.addEventListener('change', (e)=>{
+        const f = e.target.files[0];
+        fileTxt.textContent = f ? f.name : 'No file chosen';
+      });
+
+      // simple local-draft save (no backend) — stores in localStorage
+      window.saveDraft = function(e){
+        e.preventDefault();
+        const fields = ['name','f_name','P_number','email','address','message'];
+        const payload = {};
+        fields.forEach(k=>{ const el = document.querySelector('[name="'+k+'"]'); payload[k]= el?el.value: '' });
+        localStorage.setItem('teacher_draft', JSON.stringify(payload));
+        alert('Draft saved locally.');
+      }
+
+      // reset form
+      window.resetForm = function(e){
+        e.preventDefault();
+        if(confirm('Reset the form?')){
+          document.querySelector('.reg-form').reset();
+          document.querySelector('.filetxt').textContent = 'No file chosen';
+        }
+      }
+
+      // on submit: small visual success
+      document.querySelector('.reg-form')?.addEventListener('submit', function(ev){
+        // basic validation visual
+        const form = ev.currentTarget;
+        if(!form.checkValidity()){
+          ev.preventDefault();
+          alert('Please complete the required fields.');
+          return;
+        }
+        // show a subtle burst animation (non-blocking)
+        const burstWrap = document.createElement('div');
+        burstWrap.className='success-burst';
+        for(let i=0;i<8;i++){ const d=document.createElement('div'); d.className='burst-dot'; d.style.background = i%2? 'linear-gradient(90deg,var(--accent-1),var(--accent-2))' : 'var(--accent-1)'; burstWrap.appendChild(d); }
+        document.querySelector('.form-panel').appendChild(burstWrap);
+        setTimeout(()=>{ try{ burstWrap.remove() }catch(e){} },900);
+        // allow actual submit to occur (server handles POST)
+      });
+
+      // restore draft if present
+      const draft = localStorage.getItem('teacher_draft');
+      if(draft){
+        try{
+          const data = JSON.parse(draft);
+          Object.keys(data).forEach(k=>{ const el=document.querySelector('[name="'+k+'"]'); if(el) el.value = data[k]; })
+        }catch(e){console.warn('invalid draft')}
+      }
+
+      // Accessibility: move progress based on filled fields
+      const progress = document.querySelector('.progress');
+      const inputs = Array.from(document.querySelectorAll('.reg-form input, .reg-form textarea, .reg-form select'))
+        .filter(i=>i.type!=='button' && i.type!=='submit' && i.type!=='file');
+      function updateProgress(){
+        const total = inputs.length; let filled=0;
+        inputs.forEach(i=>{ if(i.value && i.value.trim()!=='') filled++; })
+        const pct = Math.round((filled/total)*100);
+        progress.style.width = (20 + (pct*0.8)) + '%'; // min 20% for visual
+      }
+      inputs.forEach(i=>i.addEventListener('input', updateProgress));
+      updateProgress();
+
+    })();
+  </script>
+</body>
+</html>

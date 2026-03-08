@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GCMS College — Principal & Faculty</title>
+  <style>
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: 'Roboto', 'Arial', sans-serif; line-height: 1.6; background: #f8fafc; color: #1f2a44; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    button, input { font: inherit; }
+
+    /* CSS VARIABLES */
+    :root {
+      --primary: #4a3c78; /* Deep purple for sophistication */
+      --accent: #ec4899; /* Vibrant pink for modern American flair */
+      --secondary: #64748b; /* Slate for secondary text */
+      --bg-light: #ffffff; /* Clean white */
+      --border: #e5e7eb; /* Light border */
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+      --maxw: 1240px;
+      --transition: 0.3s ease-in-out;
+      --watercolor-1: rgba(236, 72, 153, 0.2); /* Pink watercolor */
+      --watercolor-2: rgba(100, 116, 139, 0.15); /* Slate watercolor */
+      --watercolor-3: rgba(74, 60, 120, 0.25); /* Purple watercolor */
+    }
+
+    /* UTILITIES */
+    .container { width: min(90%, var(--maxw)); margin-inline: auto; }
+    .stack-16 > * + * { margin-top: 16px; }
+    .stack-24 > * + * { margin-top: 24px; }
+    .grid { display: grid; gap: 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: var(--radius); border: none; cursor: pointer; transition: var(--transition); font-weight: 500; }
+    .btn-primary { background: var(--accent); color: var(--bg-light); }
+    .btn-primary:hover { background: #db2777; }
+    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+    .btn-outline:hover { background: var(--watercolor-1); }
+    .card { background: var(--bg-light); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; }
+
+    /* BACKGROUND */
+    .bg-wrapper { position: relative; background: var(--bg-light); }
+    .bg-wrapper::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 20% 20%, var(--watercolor-1) 0, transparent 70%);
+      opacity: 0.1; z-index: 0;
+    }
+    .bg-overlay { position: relative; z-index: 1; }
+
+    /* NAVBAR */
+    .nav { position: sticky; top: 0; z-index: 50; background: var(--bg-light); border-bottom: 1px solid var(--border); transition: var(--transition); }
+    .nav-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.6rem; color: var(--primary); }
+    .brand-mark { width: 40px; height: 40px; background: var(--accent); border-radius: var(--radius); position: relative; overflow: hidden; }
+    .brand-mark::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 40% 40%, var(--watercolor-1) 0, transparent 60%);
+      opacity: 0.6;
+    }
+    .nav-links { display: flex; gap: 16px; }
+    .nav-links a {
+      display: flex; align-items: center; gap: 8px; padding: 10px 18px; color: var(--secondary);
+      font-weight: 500; border-radius: var(--radius); position: relative; transition: var(--transition);
+    }
+    .nav-links a:hover {
+      color: var(--accent); background: var(--watercolor-2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    .nav-links a::before {
+      content: ''; position: absolute; inset: 0; z-index: -1;
+      background: radial-gradient(circle at 50% 50%, var(--watercolor-1) 0, transparent 70%);
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .nav-links a:hover::before { opacity: 0.5; }
+    .nav-links a svg { width: 20px; height: 20px; fill: currentColor; }
+    .nav-cta { display: flex; gap: 12px; }
+    .nav:hover { background: linear-gradient(90deg, var(--watercolor-1), var(--watercolor-2)); }
+
+    /* HERO / PRINCIPAL */
+    .hero { margin-top: 24px; }
+    .principal { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; align-items: stretch; }
+    .principal-photo { border-radius: var(--radius); overflow: hidden; position: relative; }
+    .principal-photo::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 30%, var(--watercolor-1) 0, transparent 70%);
+      opacity: 0.2;
+    }
+    .principal-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .principal-info { padding: 24px; display: flex; flex-direction: column; justify-content: center; }
+    .principal-info h1 { font-size: clamp(1.8rem, 2.5vw, 2.4rem); margin: 8px 0; color: var(--primary); }
+    .principal-meta { color: var(--secondary); font-size: 0.95rem; }
+    .principal-bio { color: var(--secondary); margin-top: 12px; font-size: 1rem; }
+    .principal-actions { display: flex; gap: 12px; margin-top: 16px; }
+
+    /* SEARCH BAR */
+    .search-wrap { margin: 32px 0; }
+    .search { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-light); border: 1px solid var(--border); border-radius: var(--radius); }
+    .search input { flex: 1; border: none; background: transparent; outline: none; color: var(--primary); }
+    .search .icon { width: 32px; height: 32px; background: var(--accent); color: var(--bg-light); border-radius: 50%; display: grid; place-items: center; }
+
+    /* TEACHERS GRID */
+    .teachers { margin: 32px 0; }
+    .teachers h2 { font-size: clamp(1.6rem, 2vw, 2rem); color: var(--primary); margin-bottom: 16px; }
+    .grid-teachers { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+
+    /* TEACHER CARD */
+    .t-card { position: relative; overflow: hidden; }
+    .t-media { padding: 16px 16px 0; }
+    .t-avatar { width: 140px; height: 140px; margin: 0 auto; border-radius: 50%; border: 3px solid var(--border); box-shadow: var(--shadow); transition: var(--transition); }
+    .t-body { padding: 24px 16px; text-align: center; }
+    .t-name { font-weight: 600; font-size: 1.2rem; color: var(--primary); }
+    .t-role { color: var(--secondary); font-weight: 500; margin-top: 4px; }
+    .t-meta { color: var(--secondary); font-size: 0.9rem; margin-top: 8px; }
+    .t-actions { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+    .t-card:hover .t-avatar { transform: scale(1.03); }
+    .t-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 70% 20%, var(--watercolor-1) 0, transparent 70%);
+      opacity: 0.1;
+    }
+
+    /* CONTACT STRIP */
+    .contact-strip { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin-bottom: 48px; }
+    .contact-card h3 { font-size: clamp(1.3rem, 1.8vw, 1.6rem); color: var(--primary); margin: 8px 0; }
+    .contact-card p { color: var(--secondary); font-size: 1rem; }
+
+    /* FOOTER */
+    .footer { padding: 32px 0; background: var(--primary); color: var(--bg-light); }
+    .credits { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 0.9rem; }
+
+    /* TYPOGRAPHY */
+    .eyebrow { text-transform: uppercase; font-size: 0.85rem; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; }
+    .lead { font-size: 1.1rem; color: var(--secondary); }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.6s ease; }
+
+    /* MEDIA QUERIES */
+    @media (max-width: 980px) {
+      .principal { grid-template-columns: 1fr; }
+      .contact-strip { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .nav-cta { display: none; }
+      .brand { font-size: 1.3rem; }
+      .t-avatar { width: 120px; height: 120px; }
+      .search { padding: 10px; }
+    }
+  </style>
+</head>
+<body class="bg-wrapper">
+  <div class="bg-overlay">
+    <header class="nav">
+      <div class="container nav-bar">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>GCMS College Dera Ismail Khan</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#home">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Home
+          </a>
+          <a href="#principal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            Principal
+          </a>
+          <a href="#teachers">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            Faculty
+          </a>
+          <a href="{% url 'aboutprincipal' %}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3H3C1.9 3 1 3.9 1 5v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM5 10h14v2H5zm0 3h14v2H5zm0-6h14v2H5z"/></svg>
+            Contact
+          </a>
+        </nav>
+        <div class="nav-cta">
+          <a class="btn btn-outline" href="#contact">Get in Touch</a>
+          <a class="btn btn-primary" href="mailto:principal@school.com">Email Principal</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="home" class="hero container stack-24">
+      <section id="principal" class="principal card fade-in">
+        <figure class="principal-photo">
+          <img src="{% static 'image/colloge image 3.jpg' %}" alt="Principal portrait" />
+        </figure>
+        <div class="principal-info">
+          <span class="eyebrow">Leadership</span>
+          <h1>Nazir Burki — Principal</h1>
+          <div class="principal-meta">Age: 50 · Email: gcmsdikhan@gmail.com</div>
+          <p class="principal-bio">Mr. Nazir Burki, the guiding light of GCMS College Dera Ismail Khan, inspires dreams, nurtures talent, and builds character. With vision and integrity, he leads us to excellence, shaping future leaders for a brighter tomorrow.</p>
+          <div class="principal-actions">
+            <a class="btn btn-primary" href="mailto:principal@school.com">📧 Contact Principal</a>
+            <a class="btn btn-outline" href="#teachers">Meet the Faculty</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="search-wrap">
+        <div class="search card fade-in">
+          <div class="icon">🔎</div>
+          <input id="search" type="search" placeholder="Search faculty by name or subject…" aria-label="Search faculty" />
+          <button id="clear" class="btn btn-outline" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section id="teachers" class="teachers">
+        <div class="stack-16">
+          <span class="eyebrow">Faculty</span>
+          <h2>Our Faculty</h2>
+          <div class="grid grid-teachers" id="teacherGrid"></div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact-strip">
+        <div class="contact-card card fade-in">
+          <span class="eyebrow">Need Guidance?</span>
+          <h3>Contact the Principal</h3>
+          <p class="lead">Questions about academics, admissions, or school policies? Reach out directly.</p>
+          <div class="principal-actions">
+            <a class="btn btn-primary" href="mailto:principal@school.com">Email Principal</a>
+            <a class="btn btn-outline" href="#teachers">Find a Faculty Member</a>
+          </div>
+        </div>
+        <div class="contact-card card fade-in">
+          <span class="eyebrow">Office Hours</span>
+          <h3>Mon–Fri · 9:00–17:00</h3>
+          <p>Call: (555) 123‑4567 · 123 Elm St, Springfield</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer container">
+      <div class="credits">
+        <small>© <span id="year"></span> GCMS College Dera Ismail Khan. All rights reserved.</small>
+        <small>Designed by Abid Developer</small>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const teachers = [
+      {name:"Emily Johnson", subject:"Mathematics", email:"abidmaseed13@gmail.com", age:35, img:"{% static 'image/colloge image 3.jpg' %}"},
+      {name:"Michael Brown", subject:"Science", email:"michael@school.com", age:40, img:"https://images.unsplash.com/photo-1544725176-7c40e5a2c9f9?q=80&w=600&auto=format&fit=crop"},
+      {name:"Sarah Davis", subject:"English", email:"sarah@school.com", age:29, img:"https://images.unsplash.com/photo-1549729172-8e4f4d7c0d51?q=80&w=600&auto=format&fit=crop"},
+      {name:"David Wilson", subject:"History", email:"david@school.com", age:45, img:"https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=600&auto=format&fit=crop"},
+      {name:"Laura Miller", subject:"Geography", email:"laura@school.com", age:33, img:"https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=600&auto=format&fit=crop"},
+      {name:"James Taylor", subject:"Physical Education", email:"james@school.com", age:38, img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop"},
+      {name:"Sophia Anderson", subject:"Art", email:"sophia@school.com", age:31, img:"https://images.unsplash.com/photo-1545996124-0501ebae84d0?q=80&w=600&auto=format&fit=crop"},
+      {name:"Robert Thomas", subject:"Music", email:"robert@school.com", age:42, img:"https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=600&auto=format&fit=crop"},
+      {name:"Olivia Martinez", subject:"Computer Science", email:"olivia@school.com", age:28, img:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop"},
+      {name:"Daniel White", subject:"Biology", email:"daniel@school.com", age:37, img:"https://images.unsplash.com/photo-1549729172-8e4f4d7c0d51?q=80&w=600&auto=format&fit=crop"}
+    ];
+    const grid = document.getElementById('teacherGrid');
+    const search = document.getElementById('search');
+    const clearBtn = document.getElementById('clear');
+    const render = list => grid.innerHTML = list.map(t => `
+      <article class="t-card card fade-in" aria-label="${t.name}">
+        <div class="t-media"><img class="t-avatar" src="${t.img}" alt="${t.name}"></div>
+        <div class="t-body">
+          <div class="t-name">${t.name}</div>
+          <div class="t-role">${t.subject}</div>
+          <div class="t-meta">Age: ${t.age} · <a href="mailto:${t.email}">${t.email}</a></div>
+          <div class="t-actions"><a class="btn btn-primary" href="mailto:${t.email}">Contact</a></div>
+        </div>
+      </article>`).join('');
+    const filter = q => render(teachers.filter(t => (t.name+t.subject).toLowerCase().includes(q.toLowerCase())));
+    search.addEventListener('input', e => filter(e.target.value));
+    clearBtn.addEventListener('click', () => (search.value = '', filter('')));
+    window.addEventListener('keydown', e => { if(e.altKey && e.key === '/') search.focus(); });
+    document.getElementById('year').textContent = new Date().getFullYear();
+    render(teachers);
+  </script>
+</body>
+</html>

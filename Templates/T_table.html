@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teachers Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f7fa;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      margin: 2px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-add {
+      background: linear-gradient(135deg, #bafe54ff, #bafe54ff);
+    }
+    .btn-add:hover {
+      background: linear-gradient(135deg, #426a7bff, #4e667aff);
+    }
+
+    .btn-export {
+      background: linear-gradient(135deg, #43a047, #388e3c);
+    }
+    .btn-export:hover {
+      background: linear-gradient(135deg, #388e3c, #2e7d32);
+    }
+
+    .btn-update {
+      background: linear-gradient(135deg, #ff9800, #fb8c00);
+    }
+    .btn-update:hover {
+      background: linear-gradient(135deg, #fb8c00, #ef6c00);
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #f44336, #e53935);
+    }
+    .btn-delete:hover {
+      background: linear-gradient(135deg, #e53935, #c62828);
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      background: white;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+      min-width: 900px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    thead {
+      background: #3f576bff;
+      color: white;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background: #e3f2fd;
+      transition: 0.3s ease;
+    }
+
+    td[data-label]::before {
+      content: attr(data-label);
+      font-weight: bold;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      thead {
+        display: none;
+      }
+      td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+      td[data-label]::before {
+        display: block;
+        position: absolute;
+        left: 15px;
+        top: 12px;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Teachers Table</h1>
+
+  <!-- Top Buttons -->
+  <div class="btn-container">
+    <a href="{% url 'T_form' %}" class="btn btn-add">➕ Add Teacher</a>
+    <a href="{% url 'T_form' %}" class="btn btn-export">⬇ Export</a>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>S/No</th>
+          <th>Name</th>
+          <th>Father Name</th>
+          <th>Phone Number</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Message</th>
+          <th>Sent At</th>
+          <th>Actions</th>
+
+        </tr>
+      </thead>
+       <tbody>
+        {% for i in trc %}
+        <tr> 
+          <td data-label="Name">{{forloop.counter}}</td>
+          <td data-label="Name">{{i.name }}</td>
+          <td data-label="Father Name">{{i.f_name }}</td>
+          <td data-label="Phone Number">{{i.P_number }}</td>
+          <td data-label="Email">{{i.email }}</td>
+          <td data-label="Address">{{i.address }}</td>
+          <td data-label="Message">{{i.message }}</td>
+          <td data-label="Sent At">{{i.sent_at|date:"Y-m-d H:i" }}</td> 
+           <td data-label="Actions">
+            <a href="{% url 'U_form' i.id %}" class="btn btn-update">✏ Update</a>
+            <a href="{% url 'T_delete' i.id %}" class="btn btn-delete" >🗑 Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" style="text-align:center; padding:20px;">
+            No teachers found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody> 
+ 
+    </table>
+  </div>
+</body>
+</html>

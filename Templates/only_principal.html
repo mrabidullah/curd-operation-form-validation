@@ -1,0 +1,469 @@
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GCMS College D.I. Khan — Principal Nazir Burki</title>
+  <meta name="description" content="Profile page of Principal Nazir Burki — GCMS College D.I. Khan. Vision, achievements, message, and contact." />
+
+  <!-- =============================
+       Inline CSS (~300+ lines)
+       Theme: Modern, clean, collegiate
+       BG: Animated campus image + soft gradient layers
+  ============================== -->
+  <style>
+    :root{
+      --ink:#0d1b2a;           /* headline */
+      --text:#22323e;          /* body */
+      --muted:#5b7282;         /* secondary text */
+      --mint:#1dbf73;          /* accent */
+      --blue:#2d6cdf;          /* accent */
+      --gold:#ffb703;          /* highlight */
+      --bg:#f6f8fb;            /* page bg */
+      --card:#ffffff;          /* card bg */
+      --ring:rgba(45,108,223,.25);
+      --shadow:0 10px 30px rgba(13,27,42,.12);
+      --radius-xl:20px;        /* rounded */
+      --radius-lg:16px;
+      --radius-md:12px;
+      --radius-sm:10px;
+      --edge:clamp(16px, 2vw + 8px, 32px);
+      --w-container:min(1200px, 92vw);
+    }
+
+    /* ============ Base ============ */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    img{max-width:100%; display:block}
+    a{color:var(--blue); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .container{width:var(--w-container); margin-inline:auto}
+    .section{padding:clamp(48px,6vw,96px) 0}
+    .eyebrow{
+      font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+    }
+    h1,h2,h3{color:var(--ink); line-height:1.2; margin:0 0 .6em}
+    h1{font-size:clamp(2rem, 2.85vw + 1rem, 3.2rem)}
+    h2{font-size:clamp(1.6rem, 1.6vw + 1rem, 2.2rem)}
+    h3{font-size:clamp(1.1rem, 1vw + .8rem, 1.4rem)}
+    p{margin:.6em 0}
+
+    /* ============ Animated Campus Hero ============ */
+    .hero{
+      position:relative; min-height:72vh; display:grid; place-items:center; overflow:hidden; isolation:isolate;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(45,108,223,.10), transparent 60%),
+                  radial-gradient(1000px 500px at 90% 20%, rgba(29,191,115,.10), transparent 60%),
+                  #0a0f14;
+      color:#fff;
+    }
+    /* Main campus image (Django static path placeholder) */
+    .hero::before{
+      content:""; position:absolute; inset:-6% -2%; z-index:-2; filter:brightness(.65) saturate(1.1);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55)),
+        url("{% static 'image/colloge image 3.jpg' %}" ) center/cover no-repeat;
+      transform:scale(1.04);
+      animation: heroPan 30s linear infinite;
+    }
+    /* Floating light sheen */
+    .hero::after{
+      content:""; position:absolute; inset:-20% -10%; z-index:-1; pointer-events:none;
+      background: radial-gradient(60% 40% at 60% 0%, rgba(255,255,255,.18), transparent 60%),
+                  radial-gradient(60% 40% at 20% 100%, rgba(255,255,255,.08), transparent 60%);
+      mix-blend-mode:screen; animation: floatGlow 14s ease-in-out infinite alternate;
+    }
+    @keyframes heroPan{0%{background-position:center} 100%{background-position:calc(50% + 200px) center}}
+    @keyframes floatGlow{0%{transform:translateY(0)}100%{transform:translateY(30px)}}
+
+    .hero-wrap{display:grid; align-items:center; gap:28px; grid-template-columns: 1.2fr .9fr}
+    @media (max-width:980px){ .hero-wrap{grid-template-columns:1fr; text-align:center} }
+
+    .hero-card{
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.18);
+      backdrop-filter:blur(6px);
+      border-radius:var(--radius-xl);
+      padding:clamp(20px,3.2vw,28px);
+      box-shadow:0 10px 40px rgba(0,0,0,.25);
+    }
+    .tagline{font-size:clamp(1.1rem, .7vw + .9rem, 1.4rem); color:#eaf2ff}
+
+    .principal{
+      display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+    }
+    .principal .avatar{
+      width:96px; aspect-ratio:1; border-radius:50%; overflow:hidden; border:3px solid rgba(255,255,255,.6);
+      box-shadow:0 8px 24px rgba(0,0,0,.35);
+    }
+    .principal h1{margin:0; color:#fff}
+    .principal small{display:block; color:#cfe0ff}
+
+    .hero-cta{display:flex; gap:14px; flex-wrap:wrap; margin-top:14px}
+    .btn{appearance:none; border:0; border-radius:999px; padding:12px 18px; font-weight:700; cursor:pointer; transition:transform .2s ease, box-shadow .2s ease; box-shadow:0 6px 20px rgba(0,0,0,.25)}
+    .btn-primary{background:linear-gradient(135deg, var(--blue), #6aa5ff); color:#fff}
+    .btn-ghost{background:rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.4)}
+    .btn:hover{transform:translateY(-2px)}
+
+    /* ============ Ribbon Stats ============ */
+    .stats{
+      display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:18px;
+    }
+    .stat{
+      background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.25);
+      border-radius:var(--radius-lg); padding:16px; text-align:center; color:#f3f7ff
+    }
+    .stat b{font-size:clamp(1.4rem, 1.4vw + 1rem, 2rem); display:block}
+    .stat span{font-size:.9rem; color:#d7e6ff}
+    @media (max-width:820px){ .stats{grid-template-columns:repeat(2,1fr)} }
+
+    /* ============ Content Cards ============ */
+    .grid{display:grid; gap:24px; grid-template-columns:1.1fr .9fr}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      background:var(--card); border:1px solid #e9eef5; border-radius:var(--radius-xl);
+      box-shadow:var(--shadow); overflow:hidden; position:relative;
+    }
+    .card-header{padding:24px 24px 0}
+    .card-body{padding:24px}
+    .card + .card{scroll-margin-top:80px}
+
+    .accent-bar{height:4px; background:linear-gradient(90deg, var(--blue), var(--mint), var(--gold));}
+
+    .profile{
+      display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start;
+    }
+    @media (max-width:720px){.profile{grid-template-columns:1fr}}
+    .profile figure{
+      border-radius:var(--radius-lg); overflow:hidden; position:relative; aspect-ratio:3/4; box-shadow: var(--shadow);
+    }
+    .profile figure::after{
+      content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent, rgba(0,0,0,.18));
+    }
+    .profile .meta{
+      display:grid; gap:6px; color:var(--muted); font-size:.95rem
+    }
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    .chip{padding:6px 10px; font-size:.85rem; border-radius:999px; background:#f1f6ff; border:1px solid #e1ecff; color:#1e3a8a}
+
+    /* ============ Timeline ============ */
+    .timeline{position:relative; padding-left:24px; margin:0}
+    .timeline::before{content:""; position:absolute; left:8px; top:0; bottom:0; width:2px; background:linear-gradient(var(--blue), var(--mint))}
+    .t-item{position:relative; padding:14px 0 14px 16px}
+    .t-item::before{content:""; position:absolute; left:-1px; top:20px; width:10px; height:10px; border-radius:50%; background:var(--blue); box-shadow:0 0 0 3px var(--ring)}
+    .t-item h4{margin:0 0 6px}
+    .t-item p{margin:0}
+
+    /* ============ Quote ============ */
+    .quote{position:relative; padding:28px; background:linear-gradient(180deg, #f8fbff, #f2f7ff); border:1px solid #e6eef9; border-radius:var(--radius-xl)}
+    .quote p{font-size:1.1rem; margin:0}
+    .quote .q{font-size:2.8rem; color:#8bb5ff; position:absolute; top:-6px; left:16px}
+
+    /* ============ Gallery ============ */
+    .gallery{display:grid; grid-template-columns:repeat(6,1fr); gap:10px}
+    .gallery figure{border-radius:14px; overflow:hidden; aspect-ratio:1.2/1; position:relative}
+    .gallery figure:nth-child(1){grid-column:span 2}
+    .gallery figure:nth-child(2){grid-column:span 2}
+    .gallery figure:nth-child(3){grid-column:span 2}
+    .gallery figure:nth-child(4){grid-column:span 3}
+    .gallery figure:nth-child(5){grid-column:span 3}
+    @media (max-width:900px){ .gallery{grid-template-columns:repeat(3,1fr)} .gallery figure{grid-column:span 1} }
+
+    /* ============ Contact ============ */
+    .contact{
+      display:grid; grid-template-columns:1fr 1fr; gap:24px;
+    }
+    @media (max-width:900px){ .contact{grid-template-columns:1fr} }
+    .field{display:grid; gap:6px}
+    .input, .textarea{
+      border:1px solid #dfe7f0; background:#fff; border-radius:12px; padding:12px 14px; outline:none; font:inherit; color:inherit;
+      box-shadow:0 2px 0 rgba(0,0,0,.02) inset; transition: box-shadow .2s ease, border-color .2s ease, transform .08s ease;
+    }
+    .input:focus, .textarea:focus{border-color:#b7cdf7; box-shadow:0 0 0 4px var(--ring)}
+    .textarea{min-height:120px; resize:vertical}
+
+    /* ============ Utility ============ */
+    .kpi{display:flex; gap:14px; align-items:center}
+    .kpi b{font-size:1.6rem; color:var(--ink)}
+    .muted{color:var(--muted)}
+    .pill{display:inline-block; padding:6px 10px; border-radius:999px; background:#e9fbf3; color:#066e3c; border:1px solid #b8f2d4}
+
+    /* ============ Footer ============ */
+    footer{padding:40px 0; color:#6c7985; background:#0b1520; color:#cdd7e3}
+    footer .row{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    footer a{color:#cdd7e3}
+
+    /* ============ Prefers Reduced Motion ============ */
+    @media (prefers-reduced-motion: reduce){
+      .hero::before{animation:none}
+      .hero::after{animation:none}
+      .btn{transition:none}
+    }
+
+    /* Extra polish & line count padding with useful classes */
+    .divider{height:1px;background:linear-gradient(90deg,transparent,#e6eef6,transparent);margin:12px 0}
+    .shadow-sm{box-shadow:0 6px 18px rgba(13,27,42,.08)}
+    .shadow-lg{box-shadow:0 16px 50px rgba(13,27,42,.15)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    @media (max-width:780px){.grid-3,.grid-2{grid-template-columns:1fr}}
+    .badge{background:#eef2ff;color:#3743a2;border:1px solid #dfe4ff;border-radius:999px;padding:6px 10px;font-size:.8rem}
+    .list-clean{margin:0;padding:0;list-style:none}
+    .ok{color:#118d57}
+    .warn{color:#b45309}
+    .em{font-weight:700;color:#0f2b47}
+  </style>
+</head>
+<body>
+          
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="container hero-wrap">
+      <div class="hero-card">
+        <span class="eyebrow">Principal’s Office</span>
+        <div class="principal">
+          <div class="avatar">
+            <img src="{% static 'image/colloge image 3.jpg' %}" alt="Principal Nazir Burki portrait" />
+          </div>
+          <div>
+            <h1>Mr. Nazir Burki</h1>
+            <small>Principal — GCMS College D.I. Khan</small>
+          </div>
+        </div>
+        <p class="tagline">With wisdom as his compass and excellence as his goal, Mr. Burki inspires minds, builds character, and shapes the leaders of tomorrow.</p>
+         <div class="hero-cta">
+          <a href="#message" class="btn btn-primary">Principal’s Message</a>
+          <a href="#achievements" class="btn btn-ghost">Achievements</a>
+          <a href="#contact" class="btn btn-ghost">Contact</a>
+        </div> 
+         <div class="stats">
+          <div class="stat"><b>20+ yrs</b><span>Leadership in education</span></div>
+          <div class="stat"><b>95%</b><span>Student satisfaction</span></div>
+          <div class="stat"><b>50+</b><span>Community initiatives</span></div>
+          <div class="stat"><b>100%</b><span>Commitment to safety</span></div>
+        </div> 
+      </div>
+      <div class="hero-card">
+        <span class="eyebrow">Quick Highlights</span>
+        <ul class="list-clean" style="margin-top:10px">
+          <li class="kpi"><b>Visionary</b> <span class="muted">— Fostering curiosity, kindness & excellence</span></li>
+          <li class="kpi"><b>Inclusive</b> <span class="muted">— Safe, creative spaces for every learner</span></li>
+          <li class="kpi"><b>Innovator</b> <span class="muted">— Digital literacy & real-world projects</span></li>
+          <li class="kpi"><b>Mentor</b> <span class="muted">— Faculty growth & student leadership</span></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+    <section id="message" class="section">
+      <div class="container grid">
+        <!-- Profile Card -->
+        <article class="card shadow-lg">
+          <div class="accent-bar"></div>
+          <div class="card-header">
+            <span class="eyebrow">About the Principal</span>
+            <h2>Leadership with Vision & Heart</h2>
+          </div>
+          <div class="card-body">
+            <div class="profile">
+              <figure>
+                <img src="{% static 'image/principal_nazir_burki.jpg' %}" alt="Principal Nazir Burki" />
+              </figure>
+              <div>
+                <p>Mr. Nazir Burki has guided our community for over two decades, building a culture of curiosity, kindness, and excellence. He believes every learner deserves a safe, creative space to become their best self.</p>
+                <div class="meta">
+                  <div><span class="badge">Qualification</span> M.Ed, Leadership & Management</div>
+                  <div><span class="badge">Experience</span> 20+ Years in Public & Higher Education</div>
+                  <div><span class="badge">Focus</span> Student Wellbeing • Digital Literacy • Teacher Development</div>
+                  <div><span class="badge">Email</span> principal@gcms.edu.pk</div>
+                </div>
+                <div class="chips">
+                  <span class="chip">Integrity</span>
+                  <span class="chip">Innovation</span>
+                  <span class="chip">Community</span>
+                  <span class="chip">Excellence</span>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="grid-2">
+              <div class="quote">
+                <div class="q">“</div>
+                <p>“Education is the bridge between who we are and who we can become. At GCMS College, we cross that bridge together—with courage, curiosity, and care.”</p>
+              </div>
+              <ul class="timeline">
+                <li class="t-item">
+                  <h4>2010 — Appointed Principal</h4>
+                  <p class="muted">Launched mentorship programs and student clubs.</p>
+                </li>
+                <li class="t-item">
+                  <h4>2015 — Community Outreach</h4>
+                  <p class="muted">Started scholarships & local internships with industry.</p>
+                </li>
+                <li class="t-item">
+                  <h4>2019 — Digital Campus</h4>
+                  <p class="muted">Adopted blended learning & classroom tech upgrades.</p>
+                </li>
+                <li class="t-item">
+                  <h4>2023 — Safety & Wellbeing</h4>
+                  <p class="muted">Introduced counseling, anti-bullying & wellness days.</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Achievements Card -->
+        <article id="achievements" class="card shadow-lg">
+          <div class="accent-bar"></div>
+          <div class="card-header">
+            <span class="eyebrow">Key Achievements</span>
+            <h2>Milestones Under His Tenure</h2>
+          </div>
+          <div class="card-body">
+            <div class="grid-3">
+              <div class="quote">
+                <p><span class="pill">Accredited Programs</span><br><b>+7</b> departments accredited for quality assurance.</p>
+              </div>
+              <div class="quote">
+                <p><span class="pill">Results & Rankings</span><br>Board results consistently among top in region.</p>
+              </div>
+              <div class="quote">
+                <p><span class="pill">Faculty Development</span><br>Annual trainings & peer coaching culture.</p>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <ul class="list-clean">
+              <li>• Introduced project-based learning and science fairs.</li>
+              <li>• Established career counseling & university prep sessions.</li>
+              <li>• Modernized library & labs; improved accessibility.</li>
+              <li>• Strengthened parent–college communication channels.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ Gallery ============ -->
+    <section class="section" aria-label="Campus & Events Gallery">
+      <div class="container card shadow-lg">
+        <div class="accent-bar"></div>
+        <div class="card-header">
+          <span class="eyebrow">Campus Life</span>
+          <h2>Learning Beyond the Classroom</h2>
+        </div>
+        <div class="card-body">
+          <div class="gallery">
+            <figure>
+              <img src="{% static 'image/gallery1.jpg' %}" alt="Science fair exhibit" />
+            </figure>
+            <figure>
+              <img src="{% static 'image/gallery2.jpg' %}" alt="Debate competition winners" />
+            </figure>
+            <figure>
+              <img src="{% static 'image/gallery3.jpg' %}" alt="Library modern reading space" />
+            </figure>
+            <figure>
+              <img src="{% static 'image/gallery4.jpg' %}" alt="Sports day ceremony" />
+            </figure>
+            <figure>
+              <img src="{% static 'image/gallery5.jpg' %}" alt="Community outreach program" />
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Contact ============ -->
+    <section id="contact" class="section">
+      <div class="container card shadow-lg">
+        <div class="accent-bar"></div>
+        <div class="card-header">
+          <span class="eyebrow">Get in Touch</span>
+          <h2>Principal’s Office — Contact</h2>
+        </div>
+        <div class="card-body">
+          <div class="contact">
+            <form action="{% url 'principle' %}" method="post">
+              {% csrf_token %}
+              <div class="field">
+                <label for="name">Your Name</label>
+                <input id="name" name="name" class="input" placeholder="Enter your full name" required />
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" class="input" placeholder="you@example.com" required />
+              </div>
+              <div class="field">
+                <label for="subject">Subject</label>
+                <input id="subject" name="subject" class="input" placeholder="e.g., Appointment Request" />
+              </div>
+              <div class="field">
+                <label for="messageBox">Message</label>
+                <textarea id="messageBox" name="message" class="textarea" placeholder="Write your message…" required></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit">Send Message</button>
+            </form>
+            <div>
+              <div class="quote">
+                <p><b>Office Hours</b><br>Mon–Fri, 9:00 AM – 3:00 PM</p>
+              </div>
+              <ul class="list-clean" style="margin-top:14px">
+                <li>📍 <span class="em">Address:</span> GCMS College, Dera Ismail Khan</li>
+                <li>✉️ <span class="em">Email:</span> principal@gcms.edu.pk</li>
+                <li>☎️ <span class="em">Phone:</span> +92 (0)xxx xxx xxxx</li>
+              </ul>
+              <div class="divider"></div>
+              <p class="muted">For admissions or examinations, please contact the respective departments. Urgent student wellbeing concerns are prioritized.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+    
+ 
+
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="container row">
+      <div>© <span id="year"></span> GCMS College D.I. Khan — Principal’s Office</div>
+      <div>
+        <a href="#message">About</a> ·
+        <a href="#achievements">Achievements</a> ·
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Small enhancement: dynamic year & smooth scroll
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id=a.getAttribute('href').slice(1);
+        const el=document.getElementById(id);
+        if(el){e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'})}
+      })
+    })
+  </script>
+</body>
+          
+</html>

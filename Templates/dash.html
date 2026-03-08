@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abid Developer Dashboard</title>
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ===== BACKGROUND ANIMATION ===== */
+body {
+  background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+canvas#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* ===== HEADER ===== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ffcc70;
+  text-shadow: 0 0 10px rgba(255,204,112,0.7);
+}
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 14px;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+nav ul li a:hover, nav ul li a.active {
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 10px #00f7ff;
+}
+
+/* ===== HERO ===== */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+}
+.hero h1 {
+  font-size: 2.5em;
+  animation: fadeInDown 1s ease;
+}
+.hero p {
+  color: #ccc;
+  font-size: 1.1em;
+  animation: fadeInUp 1.2s ease;
+}
+
+/* ===== CARDS ===== */
+main {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 40px 20px;
+}
+.card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  transition: all 0.4s ease;
+  position: relative;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
+  background: linear-gradient(45deg, #ffcc70, #4158d0, #ff4b1f);
+  border-radius: 18px;
+  z-index: -1;
+  animation: borderGlow 3s infinite linear;
+}
+.card h2 a {
+  color: #00f7ff;
+  text-decoration: none;
+}
+.card button {
+  background: #00f7ff;
+  color: #000;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+.card button:hover {
+  background: #ffcc70;
+  transform: scale(1.05);
+}
+.card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 0 20px rgba(0,247,255,0.6);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: rgba(0,0,0,0.5);
+}
+footer a {
+  color: #00f7ff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+footer .bottom {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInDown {
+  from {opacity: 0; transform: translateY(-30px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+@keyframes fadeInUp {
+  from {opacity: 0; transform: translateY(30px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+@keyframes borderGlow {
+  0% {filter: hue-rotate(0deg);}
+  100% {filter: hue-rotate(360deg);}
+}
+
+/* ===== WATERMARK ===== */
+.watermark {
+  position: fixed;
+  bottom: 50%;
+  left: 20px;
+  transform: rotate(-90deg);
+  font-size: 1.2em;
+  color: rgba(255,255,255,0.1);
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.watermark.right {
+  left: auto;
+  right: 20px;
+  transform: rotate(90deg);
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<header>
+  <div class="logo">Abid Developer</div>
+  <nav>
+    <ul>
+      <li><a href="#" class="active">Dashboard</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+      <li><a href="{% url 'table' %}">Students</a></li>
+      <li><a href="#teachers">Teachers</a></li>
+      <li><a href="#student">Admins</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Welcome to Our(G C M S ) College Managment</h1>
+  <p>A light and friendly workspace for your school management system.</p>
+</section>
+
+<main>
+  <div class="card" id="students">
+    <h2><a href="{% url 'form'%}">Student Entry</a></h2>
+    <p>Create or edit student records easily.</p>
+    <button>View Students</button>
+  </div>
+  <div class="card" id="teachers">
+    <h2>Teacher Entry</h2>
+    <p>Manage faculty profiles and schedules.</p>
+    <button>View Teachers</button>
+  </div>
+  <div class="card" id="admins">
+    <h2><a href="{% url 'principle' %}">Admin Entry</a></h2>
+    <p>Assign or modify administrator accounts.</p>
+    <button class="btn-highlight">Manage Admins</button>
+  </div>
+</main>
+{%block contact %}{%endblock contact %}
+<footer>
+  <a href="#">Privacy Policy</a>
+  <a href="#">Terms</a>
+  <a href="#">Contact</a>
+  <div class="bottom">
+    © 2025 College Management — Developed by Abid Developer.
+  </div>
+</footer>
+
+<div class="watermark">Designed by Abid Developer</div>
+<div class="watermark right">Designed by Abid Developer</div>
+
+<script>
+/* === PARTICLE BACKGROUND === */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let particles = [];
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 3 + 1;
+    this.speedX = Math.random() * 1 - 0.5;
+    this.speedY = Math.random() * 1 - 0.5;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,247,255,0.7)';
+    ctx.fill();
+  }
+}
+
+function initParticles() {
+  particles = [];
+  for (let i = 0; i < 100; i++) {
+    particles.push(new Particle());
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(animateParticles);
+}
+
+initParticles();
+animateParticles();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  initParticles();
+});
+</script>
+</body>
+</html>
